@@ -16,13 +16,15 @@ import com.cgfay.landmark.OneFace;
 import com.megvii.facepp.sdk.Facepp;
 import com.megvii.licensemanager.sdk.LicenseManager;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * 人脸检测器
  */
 public final class FaceTracker {
 
     private static final String TAG = "FaceTracker";
-    private static final boolean VERBOSE = false;
+    private static final boolean VERBOSE = true;
 
     private final Object mSyncFence = new Object();
 
@@ -222,6 +224,11 @@ public final class FaceTracker {
                     public void onFailed(int i, byte[] bytes) {
                         if (VERBOSE) {
                             Log.d(TAG, "Failed to register license!");
+                            try {
+                                Log.d(TAG, new String(bytes,"UTF-8"));
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
                         }
                         FaceTrackParam.getInstance().canFaceTrack = false;
                     }

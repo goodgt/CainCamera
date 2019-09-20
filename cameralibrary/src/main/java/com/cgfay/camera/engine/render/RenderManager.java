@@ -8,16 +8,17 @@ import android.view.MotionEvent;
 import com.badlogic.gdx.math.Vector3;
 import com.cgfay.camera.engine.camera.CameraParam;
 import com.cgfay.camera.engine.model.ScaleType;
+import com.cgfay.cameralibrary.R;
 import com.cgfay.filter.glfilter.base.GLImageDepthBlurFilter;
 import com.cgfay.filter.glfilter.base.GLImageFilter;
 import com.cgfay.filter.glfilter.base.GLImageOESInputFilter;
 import com.cgfay.filter.glfilter.base.GLImageVignetteFilter;
 import com.cgfay.filter.glfilter.beauty.GLImageBeautyFilter;
 import com.cgfay.filter.glfilter.beauty.bean.IBeautify;
-import com.cgfay.filter.glfilter.face.GLImageFaceReshapeFilter;
-import com.cgfay.filter.glfilter.face.GLImageFacePointsFilter;
 import com.cgfay.filter.glfilter.color.GLImageDynamicColorFilter;
 import com.cgfay.filter.glfilter.color.bean.DynamicColor;
+import com.cgfay.filter.glfilter.face.GLImageFacePointsFilter;
+import com.cgfay.filter.glfilter.face.GLImageFaceReshapeFilter;
 import com.cgfay.filter.glfilter.makeup.GLImageMakeupFilter;
 import com.cgfay.filter.glfilter.makeup.bean.DynamicMakeup;
 import com.cgfay.filter.glfilter.multiframe.GLImageFrameEdgeBlurFilter;
@@ -28,7 +29,11 @@ import com.cgfay.filter.glfilter.stickers.bean.DynamicSticker;
 import com.cgfay.filter.glfilter.utils.OpenGLUtils;
 import com.cgfay.filter.glfilter.utils.TextureRotationUtils;
 import com.cgfay.landmark.LandmarkEngine;
+import com.seu.magicfilter.filter.custom.GreenMattingGroupFilter;
+import com.seu.magicfilter.utils.TextureRotationUtil;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
@@ -50,6 +55,7 @@ public final class RenderManager {
 
     // 滤镜列表
     private SparseArray<GLImageFilter> mFilterArrays = new SparseArray<GLImageFilter>();
+    public GreenMattingGroupFilter greenMattingFilter;
 
     // 坐标缓冲
     private ScaleType mScaleType = ScaleType.CENTER_CROP;
@@ -58,6 +64,8 @@ public final class RenderManager {
     // 用于显示裁剪的纹理顶点缓冲
     private FloatBuffer mDisplayVertexBuffer;
     private FloatBuffer mDisplayTextureBuffer;
+    private FloatBuffer gLCubeBuffer;
+    private FloatBuffer gLTextureBuffer;
 
     // 视图宽高
     private int mViewWidth, mViewHeight;
@@ -76,6 +84,9 @@ public final class RenderManager {
         initBuffers();
         initFilters(context);
         mContext = context;
+        greenMattingFilter = new GreenMattingGroupFilter(context);
+        greenMattingFilter.init();
+        greenMattingFilter.loadTexture(mContext, R.drawable.a1);
     }
 
     /**
@@ -97,6 +108,8 @@ public final class RenderManager {
             }
         }
         mFilterArrays.clear();
+        if (greenMattingFilter != null)
+            greenMattingFilter.destroy();
     }
 
     /**
@@ -130,10 +143,23 @@ public final class RenderManager {
         mDisplayTextureBuffer = OpenGLUtils.createFloatBuffer(TextureRotationUtils.TextureVertices);
         mVertexBuffer = OpenGLUtils.createFloatBuffer(TextureRotationUtils.CubeVertices);
         mTextureBuffer = OpenGLUtils.createFloatBuffer(TextureRotationUtils.TextureVertices);
+
+        gLCubeBuffer = ByteBuffer.allocateDirect(TextureRotationUtil.CUBE.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer()
+                .put(TextureRotationUtil.CUBE);
+        gLCubeBuffer.position(0);
+
+        gLTextureBuffer = ByteBuffer.allocateDirect(TextureRotationUtil.TEXTURE_NO_ROTATION.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer()
+                .put(TextureRotationUtil.TEXTURE_NO_ROTATION);
+        gLTextureBuffer.position(0);
     }
 
     /**
      * 初始化滤镜
+     *
      * @param context
      */
     private void initFilters(Context context) {
@@ -162,6 +188,7 @@ public final class RenderManager {
 
     /**
      * 是否切换边框模糊
+     *
      * @param enableEdgeBlur
      */
     public synchronized void changeEdgeBlurFilter(boolean enableEdgeBlur) {
@@ -182,6 +209,7 @@ public final class RenderManager {
 
     /**
      * 切换动态滤镜
+     *
      * @param color
      */
     public synchronized void changeDynamicFilter(DynamicColor color) {
@@ -201,11 +229,12 @@ public final class RenderManager {
 
     /**
      * 切换动态滤镜
+     *
      * @param dynamicMakeup
      */
     public synchronized void changeDynamicMakeup(DynamicMakeup dynamicMakeup) {
         if (mFilterArrays.get(RenderIndex.MakeupIndex) != null) {
-            ((GLImageMakeupFilter)mFilterArrays.get(RenderIndex.MakeupIndex)).changeMakeupData(dynamicMakeup);
+            ((GLImageMakeupFilter) mFilterArrays.get(RenderIndex.MakeupIndex)).changeMakeupData(dynamicMakeup);
         } else {
             GLImageMakeupFilter filter = new GLImageMakeupFilter(mContext, dynamicMakeup);
             filter.onInputSizeChanged(mTextureWidth, mTextureHeight);
@@ -217,6 +246,7 @@ public final class RenderManager {
 
     /**
      * 切换动态资源
+     *
      * @param color
      */
     public synchronized void changeDynamicResource(DynamicColor color) {
@@ -236,6 +266,7 @@ public final class RenderManager {
 
     /**
      * 切换动态资源
+     *
      * @param sticker
      */
     public synchronized void changeDynamicResource(DynamicSticker sticker) {
@@ -257,6 +288,7 @@ public final class RenderManager {
 
     /**
      * 绘制纹理
+     *
      * @param inputTexture
      * @param mMatrix
      * @return
@@ -268,7 +300,7 @@ public final class RenderManager {
             return currentTexture;
         }
         if (mFilterArrays.get(RenderIndex.CameraIndex) instanceof GLImageOESInputFilter) {
-            ((GLImageOESInputFilter)mFilterArrays.get(RenderIndex.CameraIndex)).setTextureTransformMatrix(mMatrix);
+            ((GLImageOESInputFilter) mFilterArrays.get(RenderIndex.CameraIndex)).setTextureTransformMatrix(mMatrix);
         }
         currentTexture = mFilterArrays.get(RenderIndex.CameraIndex)
                 .drawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
@@ -317,6 +349,8 @@ public final class RenderManager {
                 mFilterArrays.get(RenderIndex.VignetteIndex).setFilterEnable(mCameraParam.enableVignette);
                 currentTexture = mFilterArrays.get(RenderIndex.VignetteIndex).drawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
             }
+
+            currentTexture = greenMattingFilter.onDrawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
         }
 
         // 显示输出，需要调整视口大小
@@ -327,6 +361,7 @@ public final class RenderManager {
 
     /**
      * 绘制调试用的人脸关键点
+     *
      * @param mCurrentTexture
      */
     public void drawFacePoint(int mCurrentTexture) {
@@ -339,6 +374,7 @@ public final class RenderManager {
 
     /**
      * 设置输入纹理大小
+     *
      * @param width
      * @param height
      */
@@ -349,6 +385,7 @@ public final class RenderManager {
 
     /**
      * 设置纹理显示大小
+     *
      * @param width
      * @param height
      */
@@ -373,6 +410,9 @@ public final class RenderManager {
                 mFilterArrays.get(i).onDisplaySizeChanged(mViewWidth, mViewHeight);
             }
         }
+
+        greenMattingFilter.onDisplaySizeChanged(mViewWidth, mViewHeight);
+        greenMattingFilter.onInputSizeChanged(mTextureWidth, mTextureHeight);
     }
 
     /**
@@ -392,7 +432,7 @@ public final class RenderManager {
         float ratioWidth = (float) imageWidth / (float) mViewWidth;
         float ratioHeight = (float) imageHeight / (float) mViewHeight;
         if (mScaleType == ScaleType.CENTER_INSIDE) {
-            vertexCoord = new float[] {
+            vertexCoord = new float[]{
                     vertexVertices[0] / ratioHeight, vertexVertices[1] / ratioWidth,
                     vertexVertices[2] / ratioHeight, vertexVertices[3] / ratioWidth,
                     vertexVertices[4] / ratioHeight, vertexVertices[5] / ratioWidth,
@@ -401,7 +441,7 @@ public final class RenderManager {
         } else if (mScaleType == ScaleType.CENTER_CROP) {
             float distHorizontal = (1 - 1 / ratioWidth) / 2;
             float distVertical = (1 - 1 / ratioHeight) / 2;
-            textureCoord = new float[] {
+            textureCoord = new float[]{
                     addDistance(textureVertices[0], distHorizontal), addDistance(textureVertices[1], distVertical),
                     addDistance(textureVertices[2], distHorizontal), addDistance(textureVertices[3], distVertical),
                     addDistance(textureVertices[4], distHorizontal), addDistance(textureVertices[5], distVertical),
@@ -423,6 +463,7 @@ public final class RenderManager {
 
     /**
      * 计算距离
+     *
      * @param coordinate
      * @param distance
      * @return
@@ -431,22 +472,23 @@ public final class RenderManager {
         return coordinate == 0.0f ? distance : 1 - distance;
     }
 
-    public static final Vector3 tempVec=new Vector3();
+    public static final Vector3 tempVec = new Vector3();
+
     public StaticStickerNormalFilter touchDown(MotionEvent e) {
 
         if (mFilterArrays.get(RenderIndex.ResourceIndex) != null) {
-          GLImageFilter  glImageFilter = mFilterArrays.get(RenderIndex.ResourceIndex);
-          if(glImageFilter instanceof GLImageDynamicStickerFilter) {
-              GLImageDynamicStickerFilter glImageDynamicStickerFilter= (GLImageDynamicStickerFilter) glImageFilter;
-              tempVec.set(e.getX(), e.getY(), 0);
-              StaticStickerNormalFilter staticStickerNormalFilter=GestureHelp.hit(tempVec,glImageDynamicStickerFilter.getmFilters());
-              if(staticStickerNormalFilter!=null){
-                  Log.d("touchSticker","找到贴纸");
-              }else{
-                  Log.d("touchSticker","没有贴纸");
-              }
-              return staticStickerNormalFilter;
-          }
+            GLImageFilter glImageFilter = mFilterArrays.get(RenderIndex.ResourceIndex);
+            if (glImageFilter instanceof GLImageDynamicStickerFilter) {
+                GLImageDynamicStickerFilter glImageDynamicStickerFilter = (GLImageDynamicStickerFilter) glImageFilter;
+                tempVec.set(e.getX(), e.getY(), 0);
+                StaticStickerNormalFilter staticStickerNormalFilter = GestureHelp.hit(tempVec, glImageDynamicStickerFilter.getmFilters());
+                if (staticStickerNormalFilter != null) {
+                    Log.d("touchSticker", "找到贴纸");
+                } else {
+                    Log.d("touchSticker", "没有贴纸");
+                }
+                return staticStickerNormalFilter;
+            }
         }
 
         return null;
