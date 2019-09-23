@@ -5,6 +5,7 @@
     <application>
         <activity
             android:name="com.cgfay.camera.activity.CameraActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme" />
         <activity android:name="com.cgfay.camera.activity.CameraSettingActivity" />
         <activity android:name="com.cgfay.camera.activity.WatermarkActivity"></activity>

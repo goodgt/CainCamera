@@ -4,14 +4,18 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,24 +25,25 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.cgfay.camera.presenter.CameraPreviewPresenter;
-import com.cgfay.camera.widget.CainTextureView;
-import com.cgfay.cameralibrary.R;
 import com.cgfay.camera.engine.camera.CameraEngine;
 import com.cgfay.camera.engine.camera.CameraParam;
 import com.cgfay.camera.engine.model.GalleryType;
 import com.cgfay.camera.engine.recorder.PreviewRecorder;
+import com.cgfay.camera.engine.render.RenderManager;
+import com.cgfay.camera.presenter.CameraPreviewPresenter;
 import com.cgfay.camera.utils.PathConstraints;
 import com.cgfay.camera.widget.AspectFrameLayout;
+import com.cgfay.camera.widget.CainTextureView;
 import com.cgfay.camera.widget.HorizontalIndicatorView;
 import com.cgfay.camera.widget.PopupSettingView;
 import com.cgfay.camera.widget.RecordSpeedLevelBar;
 import com.cgfay.camera.widget.ShutterButton;
+import com.cgfay.cameralibrary.R;
 import com.cgfay.filter.multimedia.VideoCombiner;
 import com.cgfay.uitls.fragment.PermissionErrorDialogFragment;
 import com.cgfay.uitls.utils.BrightnessUtils;
@@ -48,9 +53,13 @@ import com.cgfay.uitls.utils.PermissionUtils;
 import com.cgfay.uitls.utils.StatusBarUtils;
 import com.cgfay.uitls.utils.StringUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * 相机预览页面
@@ -87,7 +96,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
     private View mContentView;
     // 预览部分
     private AspectFrameLayout mAspectLayout;
-//    private CainSurfaceView mCameraSurfaceView;
+    //    private CainSurfaceView mCameraSurfaceView;
     private CainTextureView mCameraTextureView;
     // 顶部布局
     private RelativeLayout mPreviewTop;
@@ -175,6 +184,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     /**
      * 初始化页面
+     *
      * @param view
      */
     private void initView(View view) {
@@ -231,7 +241,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         });
 
         mPreviewRightTop = (LinearLayout) view.findViewById(R.id.layout_preview_right_top);
-        mBtnSetting = (LinearLayout)view.findViewById(R.id.btn_setting);
+        mBtnSetting = (LinearLayout) view.findViewById(R.id.btn_setting);
         mBtnSetting.setOnClickListener(this);
         mBtnSwitch = (LinearLayout) view.findViewById(R.id.btn_switch);
         mBtnSwitch.setOnClickListener(this);
@@ -267,6 +277,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         mBtnRecordPreview.setOnClickListener(this);
 
         adjustBottomView();
+//        initImageList(view);
     }
 
     /**
@@ -391,12 +402,13 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     /**
      * 是否显示速度条
+     *
      * @param show
      */
     private void setShowingSpeedBar(boolean show) {
         mSpeedBarShowing = show;
         mSpeedBar.setVisibility(show ? View.VISIBLE : View.GONE);
-        ((TextView)mContentView.findViewById(R.id.tv_speed_status)).setText(show ? "速度开" : "速度关");
+        ((TextView) mContentView.findViewById(R.id.tv_speed_status)).setText(show ? "速度开" : "速度关");
         if (show) {
             if (mSettingView != null) {
                 mSettingView.dismiss();
@@ -418,7 +430,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         mSettingView.setEnableChangeFlash(mCameraParam.supportFlash);
 
         mSpeedBar.setVisibility(View.GONE);
-        ((TextView)mContentView.findViewById(R.id.tv_speed_status)).setText("速度关");
+        ((TextView) mContentView.findViewById(R.id.tv_speed_status)).setText("速度关");
     }
 
     /**
@@ -704,7 +716,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
                 List<String> focusModes = CameraEngine.getInstance().getCamera()
                         .getParameters().getSupportedFocusModes();
                 if (focusModes != null && focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
-                    CameraEngine.getInstance().setFocusArea(CameraEngine.getFocusArea((int)x, (int)y,
+                    CameraEngine.getInstance().setFocusArea(CameraEngine.getFocusArea((int) x, (int) y,
                             mCameraTextureView.getWidth(), mCameraTextureView.getHeight(), FocusSize));
                     mMainHandler.post(() -> {
                         mCameraTextureView.showFocusAnimation();
@@ -798,6 +810,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     /**
      * 显示fps
+     *
      * @param fps
      */
     public void showFps(final float fps) {
@@ -813,6 +826,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     /**
      * 允许录制按钮
+     *
      * @param enable
      */
     public void enableShutter(final boolean enable) {
@@ -842,7 +856,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
                 mBtnRecordPreview.setVisibility(View.GONE);
                 mBtnRecordDelete.setVisibility(View.GONE);
             }
-            mBtnShutter.setProgressMax((int)mPreviewPresenter.getMaxRecordMilliSeconds());
+            mBtnShutter.setProgressMax((int) mPreviewPresenter.getMaxRecordMilliSeconds());
             // 添加分割线
             mBtnShutter.addSplitView();
 
@@ -884,6 +898,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     /**
      * 设置快门是否允许可用
+     *
      * @param enable
      */
     public void setShutterEnableEncoder(boolean enable) {
@@ -894,6 +909,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     /**
      * 更新录制时间
+     *
      * @param duration
      */
     public void updateRecordProgress(final long duration) {
@@ -926,6 +942,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     /**
      * 删除已录制的视频
+     *
      * @param clearAll
      */
     private void deleteRecordedVideo(boolean clearAll) {
@@ -1043,5 +1060,74 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    private void initImageList(View view) {
+        RecyclerView imgList = view.findViewById(R.id.img_list);
+        LinearLayoutManager mBeautyLayoutManager = new LinearLayoutManager(mActivity);
+        mBeautyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        imgList.setLayoutManager(mBeautyLayoutManager);
+        Vector<String> data = getVideoFileName(Environment.getExternalStorageDirectory().getPath() + "/qxb_images", ".jpg");
+        imgList.setAdapter(new RecyclerView.Adapter() {
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View view = LayoutInflater.from(mActivity).inflate(R.layout.item_img_view, viewGroup, false);
+                return new ImageHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                ImageHolder holder = (ImageHolder) viewHolder;
+                try {
+                    FileInputStream fis = new FileInputStream(data.get(i));
+                    holder.imageView.setImageBitmap(BitmapFactory.decodeStream(fis));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                holder.imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RenderManager.getInstance().greenMattingFilter.loadTexture(data.get(i));
+                    }
+                });
+            }
+
+            @Override
+            public int getItemCount() {
+                return data.size();
+            }
+
+            class ImageHolder extends RecyclerView.ViewHolder {
+
+                ImageView imageView;
+
+                public ImageHolder(@NonNull View itemView) {
+                    super(itemView);
+                    imageView = itemView.findViewById(R.id.img);
+                }
+            }
+        });
+    }
+
+    public static Vector<String> getVideoFileName(String fileAbsolutePath, String suffix) {
+        Vector<String> vecFile = new Vector<String>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()) {
+            File[] subFile = file.listFiles();
+            if (subFile != null) {
+                for (int iFileLength = 0; iFileLength < subFile.length; iFileLength++) {
+                    // 判断是否为文件夹
+                    if (!subFile[iFileLength].isDirectory()) {
+                        String filename = subFile[iFileLength].getName();
+                        // 判断是否为suffix结尾
+                        if (filename.trim().toLowerCase().endsWith(suffix)) {
+                            vecFile.add(subFile[iFileLength].getPath());
+                        }
+                    }
+                }
+            }
+        }
+        return vecFile;
     }
 }

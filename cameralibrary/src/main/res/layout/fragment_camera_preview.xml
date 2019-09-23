@@ -11,16 +11,15 @@
         android:id="@+id/layout_aspect"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="top">
-    </com.cgfay.camera.widget.AspectFrameLayout>
+        android:layout_gravity="top" />
 
     <!-- 顶部视图 -->
     <RelativeLayout
         android:id="@+id/layout_preview_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="@dimen/dp20">
+        android:layout_margin="@dimen/dp20"
+        android:orientation="horizontal">
 
         <!-- 关闭按钮 -->
         <Button
@@ -28,36 +27,37 @@
             android:layout_width="@dimen/dp30"
             android:layout_height="@dimen/dp30"
             android:layout_centerVertical="true"
-            android:background="@drawable/ic_camera_preview_close"/>
+            android:background="@drawable/ic_camera_preview_close" />
 
         <LinearLayout
             android:id="@+id/btn_select_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="@dimen/dp30"
                 android:layout_height="@dimen/dp30"
-                android:background="@drawable/ic_camera_music"/>
+                android:background="@drawable/ic_camera_music" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp25"
                 android:gravity="center"
+                android:text="选择音乐"
                 android:textAlignment="center"
-                android:textColor="@color/white"
-                android:text="选择音乐"/>
+                android:textColor="@color/white" />
         </LinearLayout>
 
 
     </RelativeLayout>
 
     <!-- 右上角视图 -->
-    <include
-        layout="@layout/view_preview_right_top"/>
+    <include layout="@layout/view_preview_right_top" />
 
     <!-- 滤镜/贴纸等页面 -->
     <FrameLayout
@@ -65,12 +65,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:clickable="true">
-    </FrameLayout>
+        android:clickable="true"></FrameLayout>
 
     <!-- 底部按钮 -->
-    <include
-        layout="@layout/view_preview_bottom"/>
+    <include layout="@layout/view_preview_bottom" />
 
     <!-- fps 提示 -->
     <TextView
@@ -78,8 +76,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginTop="@dimen/fps_margin_top"
         android:layout_marginStart="@dimen/fps_margin"
+        android:layout_marginTop="@dimen/fps_margin_top"
         android:layout_marginEnd="@dimen/fps_margin"
         android:textColor="@android:color/holo_orange_dark" />
 
@@ -91,6 +89,12 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/compare_margin_end"
         android:layout_marginBottom="@dimen/compare_margin_bottom"
-        android:background="@drawable/ic_camera_compare_normal"/>
+        android:background="@drawable/ic_camera_compare_normal" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/img_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" />
 
 </FrameLayout>

@@ -350,7 +350,7 @@ public final class RenderManager {
                 currentTexture = mFilterArrays.get(RenderIndex.VignetteIndex).drawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
             }
 
-            currentTexture = greenMattingFilter.onDrawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
+//            currentTexture = greenMattingFilter.onDrawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
         }
 
         // 显示输出，需要调整视口大小
