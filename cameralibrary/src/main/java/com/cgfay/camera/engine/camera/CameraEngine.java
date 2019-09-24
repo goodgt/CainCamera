@@ -73,7 +73,7 @@ public class CameraEngine {
         cameraParam.supportFlash = checkSupportFlashLight(parameters);
         cameraParam.previewFps = chooseFixedPreviewFps(parameters, expectFps * 1000);
         parameters.setRecordingHint(true);
-//        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+//        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         mCamera.setParameters(parameters);
         setPreviewSize(mCamera, expectWidth, expectHeight);
         setPictureSize(mCamera, expectWidth, expectHeight);
@@ -187,7 +187,7 @@ public class CameraEngine {
     private void setPreviewSize(Camera camera, int expectWidth, int expectHeight) {
         Camera.Parameters parameters = camera.getParameters();
         Camera.Size size = calculatePerfectSize(parameters.getSupportedPreviewSizes(),
-                expectWidth, expectHeight, CalculateType.Lower);
+                expectWidth, expectHeight, CalculateType.Max);
         parameters.setPreviewSize(size.width, size.height);
         CameraParam.getInstance().previewWidth = size.width;
         CameraParam.getInstance().previewHeight = size.height;
