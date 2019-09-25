@@ -226,7 +226,7 @@ public final class FaceTracker {
                             Log.d(TAG, "Failed to register license!");
                             try {
                                 Log.d(TAG, new String(bytes,"UTF-8"));
-                            } catch (UnsupportedEncodingException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
