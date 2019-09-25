@@ -67,15 +67,15 @@ vec2 faceLift(vec2 currentCoordinate, float faceLength)
     vec2 coordinate = currentCoordinate;
     vec2 currentPoint = vec2(0.0);
     vec2 destPoint = vec2(0.0);
-    float faceLiftScale = reshapeIntensity[INDEX_FACE_LIFT] * 0.05;
+    float faceLiftScale = reshapeIntensity[INDEX_FACE_LIFT] * 0.1;
     float radius = faceLength;
 
     currentPoint = cartesianPoints[3];
-    destPoint = currentPoint + (cartesianPoints[44] - currentPoint) * faceLiftScale;
+    destPoint = currentPoint + (cartesianPoints[44] - currentPoint) * (faceLiftScale * 0.6);
     coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
 
     currentPoint = cartesianPoints[29];
-    destPoint = currentPoint + (cartesianPoints[44] - currentPoint) * faceLiftScale;
+    destPoint = currentPoint + (cartesianPoints[44] - currentPoint) * (faceLiftScale * 0.6);
     coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
 
     radius = faceLength * 0.8;
@@ -84,6 +84,14 @@ vec2 faceLift(vec2 currentCoordinate, float faceLength)
     coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
 
     currentPoint = cartesianPoints[22];
+    destPoint = currentPoint + (cartesianPoints[46] - currentPoint) * (faceLiftScale * 0.6);
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    currentPoint = cartesianPoints[8];
+    destPoint = currentPoint + (cartesianPoints[46] - currentPoint) * (faceLiftScale * 0.6);
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    currentPoint = cartesianPoints[24];
     destPoint = currentPoint + (cartesianPoints[46] - currentPoint) * (faceLiftScale * 0.6);
     coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
 
@@ -96,7 +104,7 @@ vec2 faceShave(vec2 currentCoordinate, float faceLength)
     vec2 coordinate = currentCoordinate;
     vec2 currentPoint = vec2(0.0);
     vec2 destPoint = vec2(0.0);
-    float faceShaveScale = reshapeIntensity[INDEX_FACE_SHAVE] * 0.12;
+    float faceShaveScale = reshapeIntensity[INDEX_FACE_SHAVE] * 0.15;
     float radius = faceLength * 1.0;
 
     // 下巴中心
@@ -109,6 +117,24 @@ vec2 faceShave(vec2 currentCoordinate, float faceLength)
     destPoint = currentPoint + (chinCenter - currentPoint) * faceShaveScale;
     coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
 
+    chinCenter = (cartesianPoints[16] + chinCenter) * 0.5;
+    currentPoint = cartesianPoints[14];
+    destPoint = currentPoint + (chinCenter - currentPoint) * faceShaveScale;
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    currentPoint = cartesianPoints[18];
+    destPoint = currentPoint + (chinCenter - currentPoint) * faceShaveScale;
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    chinCenter = (cartesianPoints[16] + chinCenter) * 0.5;
+    currentPoint = cartesianPoints[15];
+    destPoint = currentPoint + (chinCenter - currentPoint) * faceShaveScale;
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    currentPoint = cartesianPoints[17];
+    destPoint = currentPoint + (chinCenter - currentPoint) * faceShaveScale;
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
     return coordinate;
 }
 
@@ -118,10 +144,11 @@ vec2 chinChange(vec2 currentCoordinate, float faceLength)
     vec2 coordinate = currentCoordinate;
     vec2 currentPoint = vec2(0.0);
     vec2 destPoint = vec2(0.0);
-    float chinScale = reshapeIntensity[INDEX_CHIN] * 0.08;
+    float chinScale = reshapeIntensity[INDEX_CHIN] * 0.15;
     float radius = faceLength * 1.25;
+
     currentPoint = cartesianPoints[16];
-    destPoint = currentPoint + (cartesianPoints[46] - currentPoint) * chinScale;
+    destPoint = currentPoint + (cartesianPoints[49] - currentPoint) * chinScale;
     coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
 
     return coordinate;
