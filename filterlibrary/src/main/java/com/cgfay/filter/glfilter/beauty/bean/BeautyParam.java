@@ -1,5 +1,8 @@
 package com.cgfay.filter.glfilter.beauty.bean;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 /**
  * 美颜参数
  */
@@ -70,5 +73,28 @@ public class BeautyParam {
         proboscisIntensity = 0.0f;
         mouthEnlargeIntensity = 0.0f;
         teethBeautyIntensity = 0.0f;
+    }
+
+    public void resetSp(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("BeautyParam", Context.MODE_MULTI_PROCESS);
+        beautyIntensity = sp.getFloat("0", 0.5f);
+        complexionIntensity = sp.getFloat("1", 0.5f);
+        faceLift = sp.getFloat("2", 0.0f);
+        faceShave = sp.getFloat("3", 0.0f);
+        faceNarrow = sp.getFloat("4", 0.0f);
+        chinIntensity = sp.getFloat("5", 0.5f);
+        nasolabialFoldsIntensity = sp.getFloat("6", 0.0f);
+        foreheadIntensity = sp.getFloat("7", 0.0f);
+        eyeEnlargeIntensity = sp.getFloat("8", 0.0f);
+        eyeDistanceIntensity = sp.getFloat("9", 0.0f);
+        eyeCornerIntensity = sp.getFloat("10", 0.0f);
+        eyeFurrowsIntensity = sp.getFloat("11", 0.0f);
+        eyeBagsIntensity = sp.getFloat("12", 0.0f);
+        eyeBrightIntensity = sp.getFloat("13", 0.0f);
+        noseThinIntensity = sp.getFloat("14", 0.0f);
+        alaeIntensity = sp.getFloat("15", 0.0f);
+        proboscisIntensity = sp.getFloat("16", 0.0f);
+        mouthEnlargeIntensity = sp.getFloat("17", 0.0f);
+        teethBeautyIntensity = sp.getFloat("18", 0.0f);
     }
 }

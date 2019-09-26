@@ -141,6 +141,8 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
 
         // 显示默认内容布局
         showContentLayout(mTitleButtonIndex);
+
+        mCameraParam.beauty.resetSp(getContext());
     }
 
     @Override
