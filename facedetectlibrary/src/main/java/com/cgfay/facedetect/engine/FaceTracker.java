@@ -224,11 +224,9 @@ public final class FaceTracker {
                     public void onFailed(int i, byte[] bytes) {
                         if (VERBOSE) {
                             Log.d(TAG, "Failed to register license!");
-                            try {
-                                Log.d(TAG, new String(bytes,"UTF-8"));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        }
+                        for(int x= 0 ; x < bytes.length; x++) {
+                            System.out.print((char)bytes[x]  + "");
                         }
                         FaceTrackParam.getInstance().canFaceTrack = false;
                     }
