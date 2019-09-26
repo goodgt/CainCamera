@@ -2,6 +2,7 @@ package com.cgfay.camera.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -114,6 +115,7 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
 
     /**
      * 初始化页面
+     *
      * @param view
      */
     private void initView(View view) {
@@ -198,6 +200,7 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
 
     /**
      * 显示内容布局
+     *
      * @param index
      */
     private void showContentLayout(int index) {
@@ -244,6 +247,7 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
     }
 
     // -------------------------------------- 美颜(beauty) ----------------------------------------
+
     /**
      * 显示美颜视图布局
      */
@@ -283,51 +287,53 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
      */
     private void setSeekBarBeautyParam(int position) {
         if (position == 0) {            // 磨皮
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.beautyIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.beautyIntensity * 100));
         } else if (position == 1) {     // 肤色
             mValueSeekBar.setProgress((int) (mCameraParam.beauty.complexionIntensity * 100));
         } else if (position == 2) {     // 瘦脸
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.faceLift * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.faceLift * 100));
         } else if (position == 3) {     // 削脸
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.faceShave * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.faceShave * 100));
         } else if (position == 4) {     // 小脸
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.faceNarrow * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.faceNarrow * 100));
         } else if (position == 5) {     // 下巴
-            mValueSeekBar.setProgress((int)((1.0f + mCameraParam.beauty.chinIntensity) * 50));
+            mValueSeekBar.setProgress((int) ((1.0f + mCameraParam.beauty.chinIntensity) * 50));
         } else if (position == 6) {     // 法令纹
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.nasolabialFoldsIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.nasolabialFoldsIntensity * 100));
         } else if (position == 7) {     // 额头
-            mValueSeekBar.setProgress((int)((1.0f + mCameraParam.beauty.foreheadIntensity) * 50));
+            mValueSeekBar.setProgress((int) ((1.0f + mCameraParam.beauty.foreheadIntensity) * 50));
         } else if (position == 8) {     // 大眼
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.eyeEnlargeIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.eyeEnlargeIntensity * 100));
         } else if (position == 9) {     // 眼距
-            mValueSeekBar.setProgress((int)((1.0f + mCameraParam.beauty.eyeDistanceIntensity) * 50));
+            mValueSeekBar.setProgress((int) ((1.0f + mCameraParam.beauty.eyeDistanceIntensity) * 50));
         } else if (position == 10) {    // 眼角
-            mValueSeekBar.setProgress((int)((1.0f + mCameraParam.beauty.eyeCornerIntensity) * 50));
+            mValueSeekBar.setProgress((int) ((1.0f + mCameraParam.beauty.eyeCornerIntensity) * 50));
         } else if (position == 11) {    // 卧蚕
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.eyeFurrowsIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.eyeFurrowsIntensity * 100));
         } else if (position == 12) {    // 眼袋
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.eyeBagsIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.eyeBagsIntensity * 100));
         } else if (position == 13) {    // 亮眼
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.eyeBrightIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.eyeBrightIntensity * 100));
         } else if (position == 14) {    // 瘦鼻
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.noseThinIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.noseThinIntensity * 100));
         } else if (position == 15) {    // 鼻翼
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.alaeIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.alaeIntensity * 100));
         } else if (position == 16) {    // 长鼻
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.proboscisIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.proboscisIntensity * 100));
         } else if (position == 17) {    // 嘴型
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.mouthEnlargeIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.mouthEnlargeIntensity * 100));
         } else if (position == 18) {    // 美牙
-            mValueSeekBar.setProgress((int)(mCameraParam.beauty.teethBeautyIntensity * 100));
+            mValueSeekBar.setProgress((int) (mCameraParam.beauty.teethBeautyIntensity * 100));
         }
     }
 
     /**
      * 处理美颜参数
+     *
      * @param progress
      */
     private void processBeautyParam(int position, int progress) {
+        float value = progress / 100.0f;
         if (position == 0) {            // 磨皮
             mCameraParam.beauty.beautyIntensity = progress / 100.0f;
         } else if (position == 1) {     // 肤色
@@ -340,16 +346,20 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
             mCameraParam.beauty.faceNarrow = progress / 100.0f;
         } else if (position == 5) {     // 下巴
             mCameraParam.beauty.chinIntensity = (progress - 50.0f) / 50.0f;
+            value = (progress - 50.0f) / 50.0f;
         } else if (position == 6) {     // 法令纹
             mCameraParam.beauty.nasolabialFoldsIntensity = progress / 100.0f;
         } else if (position == 7) {     // 额头
             mCameraParam.beauty.foreheadIntensity = (progress - 50.0f) / 50.0f;
+            value = (progress - 50.0f) / 50.0f;
         } else if (position == 8) {     // 大眼
             mCameraParam.beauty.eyeEnlargeIntensity = progress / 100.0f;
         } else if (position == 9) {     // 眼距
             mCameraParam.beauty.eyeDistanceIntensity = (progress - 50.0f) / 50.0f;
+            value = (progress - 50.0f) / 50.0f;
         } else if (position == 10) {    // 眼角
             mCameraParam.beauty.eyeCornerIntensity = (progress - 50.0f) / 50.0f;
+            value = (progress - 50.0f) / 50.0f;
         } else if (position == 11) {    // 卧蚕
             mCameraParam.beauty.eyeFurrowsIntensity = progress / 100.0f;
         } else if (position == 12) {    // 眼袋
@@ -367,9 +377,12 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
         } else if (position == 18) {    // 美牙
             mCameraParam.beauty.teethBeautyIntensity = progress / 100.0f;
         }
+        SharedPreferences sp = getContext().getSharedPreferences("BeautyParam", Context.MODE_MULTI_PROCESS);
+        sp.edit().putFloat(position + "", value).commit();
     }
 
     // -------------------------------------- 美妆(makeup) ----------------------------------------
+
     /**
      * 显示美妆布局
      */
@@ -407,6 +420,7 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
     }
 
     // -------------------------------------- 滤镜(filter) ----------------------------------------
+
     /**
      * 显示滤镜布局
      */
@@ -460,6 +474,7 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
 
     /**
      * 滚动到选中的滤镜位置上
+     *
      * @param index
      */
     public void scrollToCurrentFilter(int index) {
@@ -489,6 +504,7 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
 
     /**
      * 添加滤镜监听器
+     *
      * @param listener
      */
     public void addOnFilterChangeListener(OnFilterChangeListener listener) {
@@ -507,10 +523,12 @@ public class PreviewEffectFragment extends Fragment implements View.OnClickListe
 
     /**
      * 添加彩妆切换监听器
+     *
      * @param listener
      */
     public void addOnMakeupChangeListener(OnMakeupChangeListener listener) {
         mOnMakeupChangeListener = listener;
     }
+
     private OnMakeupChangeListener mOnMakeupChangeListener;
 }

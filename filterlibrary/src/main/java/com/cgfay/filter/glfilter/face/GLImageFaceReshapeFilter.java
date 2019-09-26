@@ -23,13 +23,13 @@ public class GLImageFaceReshapeFilter extends GLImageDrawElementsFilter implemen
     // 122个关键点
     private final int IndicesLength = 122 * 2;
     // 106 个关键点
-    private final int FacePoints = 106;
+    private final int FacePoints = 122;
     // 顶点坐标
     private float[] mVertices = new float[122 * 2];
     // 纹理坐标
     private float[] mTextureVertices = new float[122 * 2];
     // 笛卡尔坐标系
-    private float[] mCartesianVertices = new float[106 * 2];
+    private float[] mCartesianVertices = new float[122 * 2];
     // 脸型程度
     private float[] mReshapeIntensity = new float[12];
 

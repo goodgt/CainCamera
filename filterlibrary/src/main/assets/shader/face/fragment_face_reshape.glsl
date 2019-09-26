@@ -3,7 +3,7 @@ varying vec2 textureCoordinate;
 uniform sampler2D inputTexture;
 
 // 图像笛卡尔坐标系的关键点，也就是纹理坐标乘以宽高得到
-uniform vec2 cartesianPoints[106];
+uniform vec2 cartesianPoints[122];
 
 #define INDEX_FACE_LIFT     0   // 瘦脸
 #define INDEX_FACE_SHAVE    1   // 削脸
@@ -154,6 +154,33 @@ vec2 chinChange(vec2 currentCoordinate, float faceLength)
     return coordinate;
 }
 
+// 处理额头
+vec2 foreheadChange(vec2 currentCoordinate, float faceLength)
+{
+    vec2 coordinate = currentCoordinate;
+    vec2 currentPoint = vec2(0.0);
+    vec2 destPoint = vec2(0.0);
+    float chinScale = reshapeIntensity[INDEX_FOREHEAD] * 0.35;
+    float radius = faceLength * 1.0;
+
+    // 额头中心
+    vec2 chinCenter = (cartesianPoints[43] + cartesianPoints[110]) * 0.5;
+
+    currentPoint = cartesianPoints[109];
+    destPoint = currentPoint + (chinCenter - currentPoint) * chinScale;
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    currentPoint = cartesianPoints[110];
+    destPoint = currentPoint + (chinCenter - currentPoint) * chinScale;
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    currentPoint = cartesianPoints[111];
+    destPoint = currentPoint + (chinCenter - currentPoint) * chinScale;
+    coordinate = curveWarp(coordinate, currentPoint, destPoint, radius);
+
+    return coordinate;
+}
+
 void main()
 {
     vec2 coordinate = textureCoordinate.xy;
@@ -181,6 +208,7 @@ void main()
     coordinate = chinChange(coordinate, eyeDistance);
 
     // 额头
+    coordinate = foreheadChange(coordinate, eyeDistance);
 
     // 大眼
     float eyeEnlarge = reshapeIntensity[INDEX_EYE_ENLARGE] * 0.12; // 放大倍数
