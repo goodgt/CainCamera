@@ -536,6 +536,7 @@ public final class FaceTracker {
                         float x = (face.points[i].x / height) * 2 - 1;
                         float y = (face.points[i].y / width) * 2 - 1;
                         float[] point = new float[] {x, -y};
+                        //如果要做横屏，需要在这里做处理
                         if (orientation == 1) {
                             if (faceTrackParam.previewTrack && faceTrackParam.isBackCamera) {
                                 point[0] = -y;

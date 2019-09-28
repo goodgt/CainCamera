@@ -113,7 +113,7 @@ class RenderThread extends HandlerThread implements SurfaceTexture.OnFrameAvaila
 //            camera.addCallbackBuffer(mPreviewBuffer);
 //        }
         // 计算fps
-        if (mRenderHandler != null && mCameraParam.showFps) {
+        if (mRenderHandler != null) {
             mRenderHandler.sendEmptyMessage(RenderHandler.MSG_CALCULATE_FPS);
         }
         if (VERBOSE) {

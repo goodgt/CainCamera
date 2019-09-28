@@ -1,14 +1,14 @@
 package com.cgfay.camera.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.cgfay.cameralibrary.R;
 import com.cgfay.camera.engine.camera.CameraParam;
+import com.cgfay.cameralibrary.R;
 
 /**
  * 相机设置页面
@@ -70,11 +70,11 @@ public class CameraSettingActivity extends AppCompatActivity {
 
     private void processShowFacePoints() {
         mTextFacePoints.setText(CameraParam.getInstance().drawFacePoints
-                ? getString(R.string.show_face_points) : getString(R.string.hide_face_points));
+                ? getString(R.string.hide_face_points) : getString(R.string.show_face_points));
     }
 
     private void processShowFps() {
         mTextFps.setText(CameraParam.getInstance().showFps
-                ? getString(R.string.show_fps) : getString(R.string.hide_fps));
+                ? getString(R.string.hide_fps) : getString(R.string.show_fps));
     }
 }
