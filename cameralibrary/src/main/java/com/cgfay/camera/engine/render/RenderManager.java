@@ -29,8 +29,8 @@ import com.cgfay.filter.glfilter.stickers.bean.DynamicSticker;
 import com.cgfay.filter.glfilter.utils.OpenGLUtils;
 import com.cgfay.filter.glfilter.utils.TextureRotationUtils;
 import com.cgfay.landmark.LandmarkEngine;
-import com.seu.magicfilter.filter.custom.GreenMattingGroupFilter;
-import com.seu.magicfilter.utils.TextureRotationUtil;
+import com.gt.greenmatting.jni.GPUMattingFilter;
+import com.gt.greenmatting.utils.TextureRotationUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -55,7 +55,7 @@ public final class RenderManager {
 
     // 滤镜列表
     private SparseArray<GLImageFilter> mFilterArrays = new SparseArray<GLImageFilter>();
-    public GreenMattingGroupFilter greenMattingFilter;
+    public GPUMattingFilter greenMattingFilter;
 
     // 坐标缓冲
     private ScaleType mScaleType = ScaleType.CENTER_CROP;
@@ -84,9 +84,9 @@ public final class RenderManager {
         initBuffers();
         initFilters(context);
         mContext = context;
-        greenMattingFilter = new GreenMattingGroupFilter(context);
+        greenMattingFilter = new GPUMattingFilter();
         greenMattingFilter.init();
-        greenMattingFilter.loadTexture(mContext, R.drawable.a1);
+        greenMattingFilter.loadTextureBitmap(mContext, R.drawable.a1);
     }
 
     /**
@@ -109,7 +109,7 @@ public final class RenderManager {
         }
         mFilterArrays.clear();
         if (greenMattingFilter != null)
-            greenMattingFilter.destroy();
+            greenMattingFilter.release();
     }
 
     /**
@@ -350,7 +350,7 @@ public final class RenderManager {
                 currentTexture = mFilterArrays.get(RenderIndex.VignetteIndex).drawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
             }
 
-            currentTexture = greenMattingFilter.onDrawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
+//            currentTexture = greenMattingFilter.drawFrameBuffer(currentTexture);
         }
 
         // 显示输出，需要调整视口大小
@@ -411,8 +411,7 @@ public final class RenderManager {
             }
         }
 
-        greenMattingFilter.onDisplaySizeChanged(mViewWidth, mViewHeight);
-        greenMattingFilter.onInputSizeChanged(mTextureWidth, mTextureHeight);
+        greenMattingFilter.surfaceChanged(mViewWidth, mViewHeight);
     }
 
     /**

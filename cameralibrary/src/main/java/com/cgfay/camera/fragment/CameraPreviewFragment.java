@@ -772,22 +772,22 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             // 判断是否支持对焦模式
-            try{
+            try {
                 if (isFocusArea)
                     if (CameraEngine.getInstance().getCamera() != null) {
                         List<String> focusModes = CameraEngine.getInstance().getCamera()
                                 .getParameters().getSupportedFocusModes();
                         if (focusModes != null && focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
                             CameraEngine.getInstance().setFocusArea(CameraEngine.getFocusArea(mCameraTextureView.getWidth() / 2, mCameraTextureView.getHeight() / 2,
-                                    mCameraTextureView.getWidth(), mCameraTextureView.getHeight(), FocusSize),new Camera.AutoFocusCallback() {
+                                    mCameraTextureView.getWidth(), mCameraTextureView.getHeight(), FocusSize), new Camera.AutoFocusCallback() {
                                 @Override
                                 public void onAutoFocus(boolean success, Camera camera) {
                                     isFocusArea = false;
                                 }
-                            } );
+                            });
                         }
                     }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -1108,7 +1108,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
                 holder.imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        RenderManager.getInstance().greenMattingFilter.loadTexture(data.get(i));
+                        RenderManager.getInstance().greenMattingFilter.loadTextureBitmap(BitmapFactory.decodeFile(data.get(i)));
                     }
                 });
             }

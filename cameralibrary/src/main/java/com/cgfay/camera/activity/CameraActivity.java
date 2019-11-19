@@ -41,7 +41,7 @@ public class CameraActivity extends AppCompatActivity {
                     .addToBackStack(FRAGMENT_CAMERA)
                     .commit();
         }
-        faceTrackerRequestNetwork();
+//        faceTrackerRequestNetwork();
 
         // 选择音乐监听器
         CameraParam.getInstance().musicSelectListener = () -> {

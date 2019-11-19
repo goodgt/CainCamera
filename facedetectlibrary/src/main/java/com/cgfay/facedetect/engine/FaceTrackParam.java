@@ -9,7 +9,7 @@ import com.megvii.facepp.sdk.Facepp;
 public final class FaceTrackParam {
 
     // 是否允许检测
-    boolean canFaceTrack = false;
+    boolean canFaceTrack = true;
     // 旋转角度
     public int rotateAngle;
     // 是否相机预览检测，true为预览检测，false为静态图片检测
