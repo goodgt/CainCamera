@@ -22,7 +22,7 @@ public final class PreviewRecorder {
     // 十秒时长
     public static final int DURATION_TEN_SECOND = 10 * 1000;
     // 三分钟时长
-    public static final int DURATION_THREE_MINUTE = 180 * 1000 * 20;
+    public static final int DURATION_THREE_MINUTE = 180 * 1000 * 1;
 
     // 录制类型，默认是录制视频
     private RecordType mRecordType;

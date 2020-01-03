@@ -30,6 +30,7 @@ import com.cgfay.filter.glfilter.utils.OpenGLUtils;
 import com.cgfay.filter.glfilter.utils.TextureRotationUtils;
 import com.cgfay.landmark.LandmarkEngine;
 import com.gt.greenmatting.jni.GPUMattingFilter;
+import com.gt.greenmatting.utils.Rotation;
 import com.gt.greenmatting.utils.TextureRotationUtil;
 
 import java.nio.ByteBuffer;
@@ -86,7 +87,6 @@ public final class RenderManager {
         mContext = context;
         greenMattingFilter = new GPUMattingFilter();
         greenMattingFilter.init();
-        greenMattingFilter.loadTextureBitmap(mContext, R.drawable.a1);
     }
 
     /**
@@ -350,6 +350,9 @@ public final class RenderManager {
                 currentTexture = mFilterArrays.get(RenderIndex.VignetteIndex).drawFrameBuffer(currentTexture, mVertexBuffer, mTextureBuffer);
             }
 
+//            currentTexture = greenMattingFilter.drawFrameBufferfv(currentTexture, TextureRotationUtil.CUBE,
+//                    TextureRotationUtil.getRotation(Rotation.ROTATION_90, true, false));
+//            greenMattingFilter.loadTextureBitmap(mContext, R.drawable.a1);
 //            currentTexture = greenMattingFilter.drawFrameBuffer(currentTexture);
         }
 
@@ -412,6 +415,7 @@ public final class RenderManager {
         }
 
         greenMattingFilter.surfaceChanged(mViewWidth, mViewHeight);
+        greenMattingFilter.loadTextureBitmap(mContext, R.drawable.a1);
     }
 
     /**
