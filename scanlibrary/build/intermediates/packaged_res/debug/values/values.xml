@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="capture_item_color">#60EEEEEE</color>
+    <dimen name="album_item_height">40dp</dimen>
+    <dimen name="album_item_margin_bottom">10dp</dimen>
+    <dimen name="album_item_margin_end">30dp</dimen>
+    <dimen name="album_item_margin_start">20dp</dimen>
+    <dimen name="album_item_margin_top">10dp</dimen>
+    <dimen name="album_item_preview_size">23dp</dimen>
+    <dimen name="album_title_margin_start">20dp</dimen>
+    <dimen name="media_item_spacing">2dp</dimen>
+    <dimen name="preview_play_icon_size">60dp</dimen>
+    <string name="album_empty">没有图片/视频</string>
+    <string name="album_name_all">系统相册</string>
+    <string name="app_name">MediaLibrary</string>
+    <string name="preview_btn_edit">编辑</string>
+</resources>

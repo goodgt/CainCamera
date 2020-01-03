@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.cgfay.scan.test" >
+
+    <uses-sdk
+        android:minSdkVersion="21"
+        android:targetSdkVersion="27" />
+
+    <instrumentation
+        android:name="android.support.test.runner.AndroidJUnitRunner"
+        android:functionalTest="false"
+        android:handleProfiling="false"
+        android:label="Tests for com.cgfay.scan.test"
+        android:targetPackage="com.cgfay.scan.test" />
+
+    <application
+        android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
+        android:debuggable="true" >
+        <uses-library android:name="android.test.runner" />
+
+        <activity android:name="com.cgfay.scan.activity.MediaScanActivity" />
+        <activity android:name="com.cgfay.scan.activity.MediaPreviewActivity" />
+        <activity android:name="com.cgfay.uitls.activity.BaseActivity" />
+    </application>
+
+</manifest>
