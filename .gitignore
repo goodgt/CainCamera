@@ -6,3 +6,8 @@
 .externalNativeBuild
 *.iml
 *.log
+filterlibrary/.cxx/
+gdxlibrary/.cxx/
+medialibrary/.cxx/
+pickerlibrary/build/
+widgetlibrary/build/
