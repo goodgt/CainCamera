@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fbutton="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/iv_login" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/cardview_light_background"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="5dp"
+            app:boxCornerRadiusBottomStart="5dp"
+            app:boxCornerRadiusTopEnd="5dp"
+            app:boxCornerRadiusTopStart="5dp"
+            app:boxStrokeColor="@color/cardview_light_background">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phone_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="手机"
+                android:inputType="number"
+                android:maxLength="11"
+                android:paddingLeft="12dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textColor="@color/cardview_light_background" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:textColorHint="@color/cardview_light_background"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="5dp"
+            app:boxCornerRadiusBottomStart="5dp"
+            app:boxCornerRadiusTopEnd="5dp"
+            app:boxCornerRadiusTopStart="5dp"
+            app:boxStrokeColor="@color/cardview_light_background"
+            app:counterEnabled="true"
+            app:counterMaxLength="300"
+            app:counterTextAppearance="@style/NormalStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/context_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:hint="留言内容"
+                android:inputType="textMultiLine"
+                android:maxLength="300"
+                android:paddingLeft="12dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/cardview_light_background" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="50dp">
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/submission"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:text="提交"
+                android:textColor="@color/cardview_light_background" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

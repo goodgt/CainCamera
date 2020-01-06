@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <com.gt.greenmatting.widget.MagicCameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/image_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/iv_login"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/function_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/btn_view_switch"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:padding="10dp"
+                android:src="@mipmap/ic_btn_view_switch" />
+
+            <ImageView
+                android:id="@+id/btn_view_size"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:padding="15dp"
+                android:src="@mipmap/ic_3v4" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="50dp">
+
+            <Button
+                android:id="@+id/btn_view_info"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@mipmap/ic_btn_view_info" />
+
+            <com.gt.utils.view.CircleButtonView
+                android:id="@+id/circle_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:maxTime="3" />
+
+            <com.gt.utils.view.BgFrameLayout
+                android:id="@+id/home_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                app:corners_radius="50dp"
+                app:solid_color="@android:color/white"
+                app:stroke_color="#aaaaaa"
+                app:stroke_width="8dp">
+
+                <com.gt.utils.view.BgFrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="30dp"
+                    android:visibility="gone"
+                    app:corners_radius="5dp"
+                    app:solid_color="@android:color/holo_red_dark" />
+
+            </com.gt.utils.view.BgFrameLayout>
+
+            <Button
+                android:id="@+id/btn_view_photo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|right"
+                android:background="@mipmap/ic_btn_view_photo" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="130dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal|bottom">
+
+            <TextView
+                android:id="@+id/switch_photo"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="照片"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/switch_video"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="视频"
+                android:textColor="#aaaaaa"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btn_setting_view"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="160dp"
+            android:src="@mipmap/ic_setting" />
+
+        <FrameLayout
+            android:id="@+id/video_edit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="72dp"
+            android:visibility="gone">
+            <!-- 删除 -->
+            <Button
+                android:id="@+id/btn_record_delete"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="bottom|center"
+                android:layout_marginEnd="80dp"
+                android:background="@mipmap/ic_camera_record_delete_light" />
+
+            <!-- 预览 -->
+            <Button
+                android:id="@+id/btn_record_preview"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="bottom|center"
+                android:layout_marginStart="80dp"
+                android:background="@mipmap/ic_camera_record_done_light" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/setting_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="bottom"
+                android:background="#50000000"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <SeekBar
+                    android:id="@+id/seek_bar_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:max="1000"
+                    android:progress="1000" />
+            </FrameLayout>
+        </FrameLayout>
+
+    </FrameLayout>
+</FrameLayout>
