@@ -1,5 +1,6 @@
 package com.demo.greenmatting;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,7 +28,11 @@ import android.widget.Toast;
 import com.cgfay.camera.activity.CameraActivity;
 import com.cgfay.camera.fragment.CameraPreviewFragment;
 import com.cgfay.facedetect.engine.FaceTracker;
+import com.cgfay.filter.glfilter.resource.FilterHelper;
+import com.cgfay.filter.glfilter.resource.MakeupHelper;
+import com.cgfay.filter.glfilter.resource.ResourceHelper;
 import com.cgfay.uitls.utils.NotchUtils;
+import com.cgfay.uitls.utils.PermissionUtils;
 import com.demo.greenmatting.network.AddCookiesInterceptor;
 import com.demo.greenmatting.network.BaseRes;
 import com.demo.greenmatting.network.MyCallback;
@@ -42,7 +47,6 @@ import com.gt.photopicker.PhotoPickerActivity;
 import com.gt.photopicker.SelectModel;
 import com.gt.photopicker.intent.PhotoPickerIntent;
 import com.gt.utils.FileUtils;
-import com.gt.utils.PermissionUtils;
 import com.gt.utils.view.CircleButtonView;
 import com.gt.utils.view.OnNoDoubleClickListener;
 
@@ -96,6 +100,13 @@ public class MainNewActivity extends AppCompatActivity {
         }
         faceTrackerRequestNetwork();
 
+        com.gt.utils.PermissionUtils.requestPermission(this, com.gt.utils.PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE, new com.gt.utils.PermissionUtils.PermissionGrant() {
+            @Override
+            public void onPermissionGranted(int... requestCode) {
+                initResources();
+            }
+        });
+
         username = navView.getHeaderView(0).findViewById(R.id.username);
         navView.getHeaderView(0).setOnClickListener(new OnNoDoubleClickListener() {
             @Override
@@ -143,6 +154,17 @@ public class MainNewActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * 初始化动态贴纸、滤镜等资源
+     */
+    private void initResources() {
+        new Thread(() -> {
+            ResourceHelper.initAssetsResource(this);
+            FilterHelper.initAssetsFilter(this);
+            MakeupHelper.initAssetsMakeup(this);
+        }).start();
     }
 
     /**
