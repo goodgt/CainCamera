@@ -352,8 +352,8 @@ public final class RenderManager {
 
 //            currentTexture = greenMattingFilter.drawFrameBufferfv(currentTexture, TextureRotationUtil.CUBE,
 //                    TextureRotationUtil.getRotation(Rotation.ROTATION_90, true, false));
-//            greenMattingFilter.loadTextureBitmap(mContext, R.drawable.a1);
-//            currentTexture = greenMattingFilter.drawFrameBuffer(currentTexture);
+            greenMattingFilter.loadTextureBitmap(mContext, R.drawable.a1);
+            currentTexture = greenMattingFilter.drawFrameBuffer(currentTexture);
         }
 
         // 显示输出，需要调整视口大小
