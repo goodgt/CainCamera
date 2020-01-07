@@ -1,38 +1,29 @@
 package com.demo.greenmatting;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Looper;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cgfay.camera.activity.CameraActivity;
+import com.cgfay.camera.PreviewEngine;
 import com.cgfay.camera.fragment.CameraPreviewFragment;
+import com.cgfay.camera.listener.OnPreviewCaptureListener;
+import com.cgfay.camera.model.AspectRatio;
 import com.cgfay.facedetect.engine.FaceTracker;
 import com.cgfay.filter.glfilter.resource.FilterHelper;
 import com.cgfay.filter.glfilter.resource.MakeupHelper;
 import com.cgfay.filter.glfilter.resource.ResourceHelper;
+import com.cgfay.image.activity.ImageEditActivity;
 import com.cgfay.uitls.utils.NotchUtils;
-import com.cgfay.uitls.utils.PermissionUtils;
+import com.cgfay.video.activity.VideoEditActivity;
 import com.demo.greenmatting.network.AddCookiesInterceptor;
 import com.demo.greenmatting.network.BaseRes;
 import com.demo.greenmatting.network.MyCallback;
@@ -40,36 +31,19 @@ import com.demo.greenmatting.network.NetworkRequestUtils;
 import com.demo.greenmatting.utils.OtherUtils;
 import com.demo.greenmatting.utils.SPUtil;
 import com.google.android.material.navigation.NavigationView;
-import com.gt.greenmatting.utils.SavePictureTask;
-import com.gt.greenmatting.widget.MagicCameraView;
-import com.gt.photopicker.ImageConfig;
-import com.gt.photopicker.PhotoPickerActivity;
-import com.gt.photopicker.SelectModel;
-import com.gt.photopicker.intent.PhotoPickerIntent;
-import com.gt.utils.FileUtils;
-import com.gt.utils.view.CircleButtonView;
 import com.gt.utils.view.OnNoDoubleClickListener;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class MainNewActivity extends AppCompatActivity {
@@ -92,6 +66,23 @@ public class MainNewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if (null == savedInstanceState && mPreviewFragment == null) {
+            PreviewEngine.from(this)
+                    .setCameraRatio(AspectRatio.Ratio_16_9)
+                    .showFacePoints(true)
+                    .showFps(true)
+                    .backCamera(true)
+                    .setPreviewCaptureListener((path, type) -> {
+                        if (type == OnPreviewCaptureListener.MediaTypePicture) {
+                            Intent intent = new Intent(MainNewActivity.this, ImageEditActivity.class);
+                            intent.putExtra(ImageEditActivity.IMAGE_PATH, path);
+                            intent.putExtra(ImageEditActivity.DELETE_INPUT_FILE, true);
+                            startActivity(intent);
+                        } else if (type == OnPreviewCaptureListener.MediaTypeVideo) {
+                            Intent intent = new Intent(MainNewActivity.this, VideoEditActivity.class);
+                            intent.putExtra(VideoEditActivity.VIDEO_PATH, path);
+                            startActivity(intent);
+                        }
+                    });
             mPreviewFragment = new CameraPreviewFragment();
             getSupportFragmentManager()
                     .beginTransaction()
