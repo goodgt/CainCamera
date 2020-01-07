@@ -18,6 +18,7 @@ import com.cgfay.camera.fragment.CameraPreviewFragment;
 import com.cgfay.camera.listener.OnPreviewCaptureListener;
 import com.cgfay.camera.model.AspectRatio;
 import com.cgfay.facedetect.engine.FaceTracker;
+import com.cgfay.facedetect.utils.FaceppConstraints;
 import com.cgfay.filter.glfilter.resource.FilterHelper;
 import com.cgfay.filter.glfilter.resource.MakeupHelper;
 import com.cgfay.filter.glfilter.resource.ResourceHelper;
@@ -162,6 +163,8 @@ public class MainNewActivity extends AppCompatActivity {
      * 人脸检测SDK验证，可以替换成自己的SDK
      */
     private void faceTrackerRequestNetwork() {
+        FaceppConstraints.API_KEY = "6G21adAvo5Cj6wwpOJsuGNanjELJhQUk";
+        FaceppConstraints.API_SECRET = "So3kOWQT3rSkL0R6EudE9nijesIjPBUe";
         new Thread(() -> FaceTracker.requestFaceNetwork(MainNewActivity.this)).start();
     }
 
