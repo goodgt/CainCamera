@@ -45,7 +45,7 @@ import com.cgfay.camera.camera.CameraParam;
 import com.cgfay.camera.model.GalleryType;
 import com.cgfay.camera.widget.AspectFrameLayout;
 import com.cgfay.camera.widget.RecordSpeedLevelBar;
-import com.cgfay.filter.recorder.SpeedMode;
+import com.cgfay.media.recorder.SpeedMode;
 import com.cgfay.picker.MediaPicker;
 import com.cgfay.picker.loader.AlbumDataLoader;
 import com.cgfay.picker.model.AlbumData;
@@ -761,6 +761,9 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
                 mTabIndicator.setVisibility(View.VISIBLE);
             }
             resetDeleteButton();
+            if (mBtnRecord != null) {
+                mBtnRecord.reset();
+            }
         });
     }
 
