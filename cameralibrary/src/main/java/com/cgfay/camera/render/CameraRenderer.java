@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.cgfay.camera.camera.CameraParam;
 import com.cgfay.camera.presenter.PreviewPresenter;
+import com.cgfay.camera.render.gt.MyRenderManager;
 import com.cgfay.filter.gles.EglCore;
 import com.cgfay.filter.gles.WindowSurface;
 import com.cgfay.filter.glfilter.color.bean.DynamicColor;
@@ -54,7 +55,7 @@ public class CameraRenderer extends Thread {
     // 当前纹理
     private int mCurrentTexture;
     // 渲染管理器
-    private final RenderManager mRenderManager;
+    private final MyRenderManager mRenderManager;
     // 计算帧率
     private final FrameRateMeter mFrameRateMeter;
     // 预览参数
@@ -70,7 +71,7 @@ public class CameraRenderer extends Thread {
         mPriority = Process.THREAD_PRIORITY_DISPLAY;
         mWeakPresenter = new WeakReference<>(presenter);
         mCameraParam = CameraParam.getInstance();
-        mRenderManager = new RenderManager();
+        mRenderManager = new MyRenderManager();
         mFrameRateMeter = new FrameRateMeter();
         mThreadStarted = false;
     }
