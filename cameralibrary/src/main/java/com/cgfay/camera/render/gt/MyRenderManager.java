@@ -13,6 +13,7 @@ import com.cgfay.cameralibrary.R;
 import com.cgfay.filter.glfilter.base.GLImageFilter;
 import com.cgfay.filter.glfilter.base.GLImageOESInputFilter;
 import com.cgfay.filter.glfilter.beauty.bean.IBeautify;
+import com.cgfay.filter.glfilter.utils.TextureRotationUtils;
 import com.gt.greenmatting.jni.GPUMattingFilter;
 import com.gt.greenmatting.jni.GPUOesVideoFilter;
 import com.gt.greenmatting.utils.Rotation;
@@ -184,8 +185,9 @@ public final class MyRenderManager extends RenderManager {
                         TextureRotationUtil.getRotation(Rotation.ROTATION_180, true, false));
                 mattingFilter.loadTextureVideo(videoId, player.getVideoWidth(), player.getVideoHeight());
             }
-            currentTexture = mattingFilter.drawFrameBufferfv(currentTexture, TextureRotationUtil.CUBE,
-                    TextureRotationUtil.getRotation(Rotation.ROTATION_180, true, true));
+            mattingFilter.setBagTextureRotation(Rotation.ROTATION_180.asInt(), true, false);
+            mattingFilter.setWatermarkTextureRotation(Rotation.ROTATION_180.asInt(), true, false);
+            currentTexture = mattingFilter.drawFrameBuffer(currentTexture);
         }
         return currentTexture;
     }
