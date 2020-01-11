@@ -9,7 +9,6 @@ import android.view.Surface;
 
 import com.cgfay.camera.camera.CameraParam;
 import com.cgfay.camera.render.RenderIndex;
-import com.cgfay.cameralibrary.R;
 import com.cgfay.filter.glfilter.base.GLImageFilter;
 import com.cgfay.filter.glfilter.base.GLImageOESInputFilter;
 import com.cgfay.filter.glfilter.beauty.bean.IBeautify;
@@ -41,6 +40,15 @@ public final class MyRenderManager extends RenderManager {
     private FloatBuffer mDisplayVertexBuffer;
     private FloatBuffer mDisplayTextureBuffer;
     private CameraParam mCameraParam;
+    private static MyRenderManager renderManager;
+
+    public static MyRenderManager getInstance() {
+        return renderManager;
+    }
+
+    public MyRenderManager() {
+        renderManager = this;
+    }
 
     public void init(Context context) {
         super.init(context);
@@ -173,7 +181,6 @@ public final class MyRenderManager extends RenderManager {
     }
 
     public int drawFrameBuffer(int currentTexture) {
-        loadTexture(R.drawable.a1);
         if (mattingFilter != null && isReplaceBag) {
             if (videoTexture != null && player.isPlaying() && player.getCurrentPosition() > 0) {
                 videoTexture.updateTexImage();

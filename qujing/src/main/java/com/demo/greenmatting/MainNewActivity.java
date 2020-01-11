@@ -22,6 +22,7 @@ import com.cgfay.camera.PreviewEngine;
 import com.cgfay.camera.fragment.CameraPreviewFragment;
 import com.cgfay.camera.listener.OnPreviewCaptureListener;
 import com.cgfay.camera.model.AspectRatio;
+import com.cgfay.camera.render.gt.MyRenderManager;
 import com.cgfay.facedetect.engine.FaceTracker;
 import com.cgfay.facedetect.utils.FaceppConstraints;
 import com.cgfay.filter.glfilter.resource.FilterHelper;
@@ -56,9 +57,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.cgfay.camera.render.gt.MyRenderManager.mattingFilter;
-
 
 public class MainNewActivity extends AppCompatActivity {
 
@@ -99,7 +97,7 @@ public class MainNewActivity extends AppCompatActivity {
             mPreviewFragment = new CameraPreviewFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(com.cgfay.cameralibrary.R.id.fragment_container, mPreviewFragment, FRAGMENT_CAMERA)
+                    .replace(R.id.fragment_container, mPreviewFragment, FRAGMENT_CAMERA)
                     .commit();
         }
         faceTrackerRequestNetwork();
@@ -158,6 +156,7 @@ public class MainNewActivity extends AppCompatActivity {
                 }
             }
         });
+        initImageList();
     }
 
     /**
@@ -208,7 +207,7 @@ public class MainNewActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (mPreviewFragment != null && !mPreviewFragment.onBackPressed()) {
             super.onBackPressed();
-            overridePendingTransition(0, com.cgfay.cameralibrary.R.anim.anim_slide_down);
+            overridePendingTransition(0, R.anim.anim_slide_down);
         }
     }
 
@@ -292,7 +291,8 @@ public class MainNewActivity extends AppCompatActivity {
                 holder.imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mattingFilter.loadTextureBitmap(BitmapFactory.decodeFile(data.get(i)));
+                        if (MyRenderManager.getInstance() != null)
+                            MyRenderManager.getInstance().loadTexture(BitmapFactory.decodeFile(data.get(i)));
                     }
                 });
             }
@@ -308,7 +308,7 @@ public class MainNewActivity extends AppCompatActivity {
 
                 public ImageHolder(@NonNull View itemView) {
                     super(itemView);
-                    imageView = itemView.findViewById(com.cgfay.cameralibrary.R.id.img);
+                    imageView = itemView.findViewById(R.id.img);
                 }
             }
         });
