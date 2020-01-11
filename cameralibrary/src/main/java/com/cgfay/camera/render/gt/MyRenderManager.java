@@ -13,7 +13,6 @@ import com.cgfay.cameralibrary.R;
 import com.cgfay.filter.glfilter.base.GLImageFilter;
 import com.cgfay.filter.glfilter.base.GLImageOESInputFilter;
 import com.cgfay.filter.glfilter.beauty.bean.IBeautify;
-import com.cgfay.filter.glfilter.utils.TextureRotationUtils;
 import com.gt.greenmatting.jni.GPUMattingFilter;
 import com.gt.greenmatting.jni.GPUOesVideoFilter;
 import com.gt.greenmatting.utils.Rotation;
@@ -29,10 +28,10 @@ public final class MyRenderManager extends RenderManager {
 
     private Context context;
 
-    public GPUMattingFilter mattingFilter;
+    public static GPUMattingFilter mattingFilter;
     private boolean isReplaceBag = false;
 
-    private GPUOesVideoFilter gpuVideoFilter;
+    private static GPUOesVideoFilter gpuVideoFilter;
     private MediaPlayer player = new MediaPlayer();
     private SurfaceTexture videoTexture;
     private int videoTexturesId = -1;

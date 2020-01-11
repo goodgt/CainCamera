@@ -46,6 +46,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.cgfay.camera.render.gt.MyRenderManager.mattingFilter;
+import static com.cgfay.camera.render.gt.MyRenderManager.gpuVideoFilter;
+
 
 public class MainNewActivity extends AppCompatActivity {
 
@@ -65,7 +68,6 @@ public class MainNewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
         ButterKnife.bind(this);
-
         if (null == savedInstanceState && mPreviewFragment == null) {
             PreviewEngine.from(this)
                     .setCameraRatio(AspectRatio.Ratio_16_9)
