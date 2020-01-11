@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cgfay.camera.PreviewEngine;
@@ -34,8 +39,12 @@ import com.demo.greenmatting.utils.SPUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.gt.utils.view.OnNoDoubleClickListener;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,11 +52,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.cgfay.camera.render.gt.MyRenderManager.mattingFilter;
-import static com.cgfay.camera.render.gt.MyRenderManager.gpuVideoFilter;
 
 
 public class MainNewActivity extends AppCompatActivity {
@@ -254,5 +264,74 @@ public class MainNewActivity extends AppCompatActivity {
                 ) ? "游客" : SPUtil.getStringSpVal(MainNewActivity.this, "username"));
                 break;
         }
+    }
+
+    private void initImageList() {
+        RecyclerView imgList = findViewById(R.id.img_list);
+        LinearLayoutManager mBeautyLayoutManager = new LinearLayoutManager(this);
+        mBeautyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        imgList.setLayoutManager(mBeautyLayoutManager);
+        Vector<String> data = getVideoFileName(Environment.getExternalStorageDirectory().getPath() + "/qxb_images", ".jpg");
+        imgList.setAdapter(new RecyclerView.Adapter() {
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View view = LayoutInflater.from(MainNewActivity.this).inflate(R.layout.item_img_view, viewGroup, false);
+                return new ImageHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                ImageHolder holder = (ImageHolder) viewHolder;
+                try {
+                    FileInputStream fis = new FileInputStream(data.get(i));
+                    holder.imageView.setImageBitmap(BitmapFactory.decodeStream(fis));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                holder.imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mattingFilter.loadTextureBitmap(BitmapFactory.decodeFile(data.get(i)));
+                    }
+                });
+            }
+
+            @Override
+            public int getItemCount() {
+                return data.size();
+            }
+
+            class ImageHolder extends RecyclerView.ViewHolder {
+
+                ImageView imageView;
+
+                public ImageHolder(@NonNull View itemView) {
+                    super(itemView);
+                    imageView = itemView.findViewById(com.cgfay.cameralibrary.R.id.img);
+                }
+            }
+        });
+    }
+
+    public static Vector<String> getVideoFileName(String fileAbsolutePath, String suffix) {
+        Vector<String> vecFile = new Vector<String>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()) {
+            File[] subFile = file.listFiles();
+            if (subFile != null) {
+                for (int iFileLength = 0; iFileLength < subFile.length; iFileLength++) {
+                    // 判断是否为文件夹
+                    if (!subFile[iFileLength].isDirectory()) {
+                        String filename = subFile[iFileLength].getName();
+                        // 判断是否为suffix结尾
+                        if (filename.trim().toLowerCase().endsWith(suffix)) {
+                            vecFile.add(subFile[iFileLength].getPath());
+                        }
+                    }
+                }
+            }
+        }
+        return vecFile;
     }
 }
