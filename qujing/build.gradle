@@ -58,7 +58,7 @@ dependencies {
     implementation 'info.hoang8f:fbutton:1.0.5'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
 
-    implementation 'com.github.guting50:Magicfilter:1.0.1'
+    implementation 'com.github.guting50:Magicfilter:1.0.2'
 
     implementation project(':cameralibrary')
     implementation project(':filterlibrary')
